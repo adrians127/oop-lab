@@ -3,6 +3,7 @@ package agh.ics.oop;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -43,21 +44,38 @@ public class World {
 
 
     public static Direction[] stringToDirection(String[] tab) {
-        return Arrays.stream(tab).filter(s -> s.equals("f") || s.equals("r")
-                || s.equals("b") || s.equals("l")).map(s -> switch (s) {
+        return Arrays.stream(tab).map(s -> switch (s) {
             case "f" -> Direction.F;
             case "r" -> Direction.R;
             case "b" -> Direction.B;
             case "l" -> Direction.L;
-            default -> Direction.NONE;
-        }).toArray(Direction[]::new);
+            default -> null;
+        }).filter(Objects::nonNull).toArray(Direction[]::new);
     }
 
     public static void main(String[] args) {
-        Vector2d position1 = new Vector2d(1,2);
-        System.out.println(position1);
-        Vector2d position2 = new Vector2d(-2,1);
-        System.out.println(position2);
-        System.out.println(position1.add(position2));
+        Animal animal = new Animal();
+        System.out.println(animal.toString());
+        String[] bom = {"f", "b", "geeee", "forward", "backward"};
+        OptionsParser optionsParser = new OptionsParser();
+        MoveDirection[] moveDirections;
+        moveDirections = optionsParser.parse(bom);
+        for (MoveDirection i : moveDirections){
+            System.out.println(i);
+        }
+        System.out.println(animal.toString());
+
+        MoveDirection[] moveDirectionList = {MoveDirection.LEFT};
+        String[] wyr = {"l"};
+        MoveDirection[] moveDirectionList1 = optionsParser.parse(wyr);
+        for (MoveDirection i : moveDirectionList){
+            System.out.println(i);
+        }
+        for (MoveDirection i : moveDirectionList1){
+            System.out.println(i);
+        }
+        if (Arrays.equals(moveDirectionList1, moveDirectionList))
+        {System.out.println("be");}
+
     }
 }

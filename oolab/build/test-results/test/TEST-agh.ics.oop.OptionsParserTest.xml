@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="agh.ics.oop.OptionsParserTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-11-07T20:59:09" hostname="Adrians-MacBook-Air.local" time="0.014">
+  <properties/>
+  <testcase name="parseTest()" classname="agh.ics.oop.OptionsParserTest" time="0.014"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
