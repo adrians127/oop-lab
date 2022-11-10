@@ -54,28 +54,11 @@ public class World {
     }
 
     public static void main(String[] args) {
-        Animal animal = new Animal();
-        System.out.println(animal.toString());
-        String[] bom = {"f", "b", "geeee", "forward", "backward"};
-        OptionsParser optionsParser = new OptionsParser();
-        MoveDirection[] moveDirections;
-        moveDirections = optionsParser.parse(bom);
-        for (MoveDirection i : moveDirections){
-            System.out.println(i);
-        }
-        System.out.println(animal.toString());
-
-        MoveDirection[] moveDirectionList = {MoveDirection.LEFT};
-        String[] wyr = {"l"};
-        MoveDirection[] moveDirectionList1 = optionsParser.parse(wyr);
-        for (MoveDirection i : moveDirectionList){
-            System.out.println(i);
-        }
-        for (MoveDirection i : moveDirectionList1){
-            System.out.println(i);
-        }
-        if (Arrays.equals(moveDirectionList1, moveDirectionList))
-        {System.out.println("be");}
-
+        MoveDirection[] directions = new OptionsParser().parse(args);
+        IWorldMap map = new RectangularMap(10, 5);
+        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
+        IEngine engine = new SimulationEngine(directions, map, positions);
+        // ruchy : f b r l f f r r f f f f f f f f
+        engine.run();
     }
 }
