@@ -57,4 +57,12 @@ public class RectangularMap implements IWorldMap{
     public String toString() {
         return mapVisualizer.draw(new Vector2d(0,0), new Vector2d(width - 1, height - 1));
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }

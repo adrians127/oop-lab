@@ -31,4 +31,8 @@ public class SimulationEngine implements IEngine {
         }
         System.out.println(map.toString());
     }
+
+    public List<Animal> getAnimals() {
+        return animals;
+    }
 }
