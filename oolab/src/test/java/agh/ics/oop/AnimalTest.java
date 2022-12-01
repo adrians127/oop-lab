@@ -39,7 +39,7 @@ class AnimalTest {
          for (int i = 0; i < 5; i++){
              animal.move(MoveDirection.FORWARD);
          }
-        assertEquals(new Vector2d(3, 4), animal.getPosition());
+        assertEquals(new Vector2d(3, 5), animal.getPosition());
         assertEquals(MapDirection.NORTH, animal.getDirection());
         for (int i = 0; i < 5; i++){
             animal.move(MoveDirection.BACKWARD);

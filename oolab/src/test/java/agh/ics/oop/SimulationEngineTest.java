@@ -16,7 +16,7 @@ class SimulationEngineTest {
         SimulationEngine engine = engineStart(directionsAsString, initialPositions);
         engine.run();
         // (0,1) (9,4) should be
-        Vector2d[] positionsAfterRun = new Vector2d[]{new Vector2d(2, 0), new Vector2d(3, 4)};
+        Vector2d[] positionsAfterRun = new Vector2d[]{new Vector2d(2, 0), new Vector2d(3, 5)};
         areAnimalPlacedGood(engine, positionsAfterRun);
 
         // second test
