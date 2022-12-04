@@ -4,8 +4,7 @@ import java.util.*;
 
 public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
 
-    List<Grass> grassList;
-    List<Animal> animalList;
+
 
     HashMap<Vector2d, IMapElement> mapElements = new HashMap<>();
 
@@ -18,8 +17,7 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     protected Vector2d topRightBorderDraw;
 
     public AbstractWorldMap(Vector2d botLeft, Vector2d topRight, int grassNumber) {
-        grassList = new ArrayList<>();
-        animalList = new ArrayList<>();
+
         bottomLeftBorder = botLeft;
         topRightBorder = topRight;
         this.grassNumber = grassNumber;
