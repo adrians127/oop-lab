@@ -16,20 +16,12 @@ public class GrassField extends AbstractWorldMap{
 
     private void createGrassField(int n) {
         for (int i = 0; i < n; i++) {
-            grassList.add(new Grass(randomGrassPlacer()));
+            Vector2d generatedPosition = randomGrassPlacer();
+            mapElements.put(generatedPosition, new Grass(generatedPosition));
+//            grassList.add(new Grass(randomGrassPlacer()));
         }
     }
-    @Override
-    public boolean isOccupied(Vector2d position) {
-        if (super.isOccupied(position)){
-            return true;
-        }
-        for (Grass at : grassList){
-            if (at.getPosition().equals(position))
-                return true;
-        }
-        return false;
-    }
+
 
     @Override
     public Object objectAt(Vector2d position) {
@@ -43,6 +35,7 @@ public class GrassField extends AbstractWorldMap{
         }
         return null;
     }
+
 
     @Override
     public String toString() {

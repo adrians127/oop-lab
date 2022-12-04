@@ -1,13 +1,14 @@
 package agh.ics.oop;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
-public class AbstractWorldMap implements IWorldMap {
+public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
 
     List<Grass> grassList;
     List<Animal> animalList;
+
+    HashMap<Vector2d, IMapElement> mapElements = new HashMap<>();
+
     protected int grassNumber;
 
     MapVisualizer mapVisualizer = new MapVisualizer(this);
@@ -39,12 +40,10 @@ public class AbstractWorldMap implements IWorldMap {
         bottomLeftBorderDraw = topRightBorder;
         topRightBorderDraw = bottomLeftBorder;
         // change for animalList or grass depends what you want to see
-        animalList.forEach(
-                at -> {
-                    bottomLeftBorderDraw = bottomLeftBorderDraw.lowerLeft(at.getPosition());
-                    topRightBorderDraw = topRightBorderDraw.upperRight(at.getPosition());
-                }
-        );
+        for (IMapElement mapElement : mapElements.values()) {
+            bottomLeftBorderDraw = bottomLeftBorderDraw.lowerLeft(mapElement.getPosition());
+            topRightBorderDraw = topRightBorderDraw.upperRight(mapElement.getPosition());
+        }
         bottomLeftBorderDraw.x -= 1;
         bottomLeftBorderDraw.y -= 1;
         topRightBorderDraw.x += 1;
@@ -60,46 +59,57 @@ public class AbstractWorldMap implements IWorldMap {
     public boolean canMoveTo(Vector2d position) {
         return position.follows(bottomLeftBorder) &&
                 position.precedes(topRightBorder)
-                && isGrassThere(position) && !isOccupied(position) ;
+                && isGrassThere(position) && !(objectAt(position) instanceof Animal) ;
     }
+
+    private void positionChangeGrass(Vector2d position) {
+        Vector2d newPosition = randomGrassPlacer();
+        Grass tempGrass = (Grass) objectAt(position);
+        tempGrass.setPosition(newPosition);
+        mapElements.remove(position);
+        mapElements.put(newPosition, tempGrass);
+    }
+
     public boolean isGrassThere(Vector2d position) {
         if (objectAt(position) instanceof Grass) {
-            ((Grass) objectAt(position)).setPosition(randomGrassPlacer());
+            positionChangeGrass(position);
         }
         return true;
     }
 
     @Override
     public boolean place(Animal animal) {
+        if (objectAt(animal.getPosition()) instanceof Animal){
+            return false;
+        }
         if (objectAt(animal.getPosition()) instanceof Grass ) {
-            ((Grass)objectAt(animal.getPosition())).setPosition(randomGrassPlacer());
-            animalList.add(animal);
-            return true;
+            positionChangeGrass(animal.getPosition());
+//            mapElements.put(animal.getPosition(), animal);
+//            return true;
         }
-        if (!isOccupied(animal.getPosition())){
-            animalList.add(animal);
-            return true;
-        }
+        mapElements.put(animal.getPosition(), animal);
+        animal.addObserver(this);
 
-        return false;
+        return true;
     }
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        for (Animal at : animalList){
-            if (at.getPosition().equals(position))
-                return true;
-        }
-        return false;
+        return objectAt(position) != null;
     }
 
     @Override
     public Object objectAt(Vector2d position) {
-        for (Animal animal: animalList) {
-            if (animal.getPosition().equals(position)){
-                return animal;
-            }
-        }
-        return null;
+        return mapElements.get(position);
+    }
+
+    @Override
+    public boolean positionChanged(Vector2d oldPosition, Vector2d newPosition) {
+        // jezeli bedzie tam trawa modify
+        Animal tempAnimal = (Animal) mapElements.get(oldPosition);
+        mapElements.remove(oldPosition);
+        mapElements.put(newPosition, tempAnimal);
+        return true;
+
     }
 }
