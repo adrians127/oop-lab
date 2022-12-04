@@ -18,8 +18,8 @@ public class SimulationEngine implements IEngine {
         this.map = map;
         for (Vector2d coordinate : coordinates){
             Animal animal = new Animal(map, coordinate); // default orientation is North in Animal class
-            animals.add(animal);
             map.place(animal);
+            animals.add(animal);
         }
     }
 

@@ -4,8 +4,6 @@ import java.util.*;
 
 public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
 
-
-
     HashMap<Vector2d, IMapElement> mapElements = new HashMap<>();
 
     protected int grassNumber;
@@ -23,18 +21,18 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
         this.grassNumber = grassNumber;
     }
 
-    protected Vector2d randomGrassPlacer () {
+    protected Vector2d randomGrassPlacer() {
         int n = grassNumber;
         while (true) {
             Random random = new Random();
-            Vector2d newPosition = new Vector2d(random.nextInt((int)Math.sqrt(n*10)), random.nextInt((int)Math.sqrt(n*10)));
+            Vector2d newPosition = new Vector2d(random.nextInt((int) Math.sqrt(n * 10)), random.nextInt((int) Math.sqrt(n * 10)));
             if (objectAt(newPosition) == null) {
                 return newPosition;
             }
         }
     }
 
-    private void setBorders () {
+    private void setBorders() {
         bottomLeftBorderDraw = topRightBorder;
         topRightBorderDraw = bottomLeftBorder;
         // change for animalList or grass depends what you want to see
@@ -47,6 +45,7 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
         topRightBorderDraw.x += 1;
         topRightBorderDraw.y += 1;
     }
+
     @Override
     public String toString() {
         setBorders();
@@ -57,7 +56,7 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     public boolean canMoveTo(Vector2d position) {
         return position.follows(bottomLeftBorder) &&
                 position.precedes(topRightBorder)
-                && isGrassThere(position) && !(objectAt(position) instanceof Animal) ;
+                && isGrassThere(position) && !(objectAt(position) instanceof Animal);
     }
 
     private void positionChangeGrass(Vector2d position) {
@@ -77,10 +76,10 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
 
     @Override
     public boolean place(Animal animal) {
-        if (objectAt(animal.getPosition()) instanceof Animal){
-            return false;
+        if (objectAt(animal.getPosition()) instanceof Animal) {
+            throw new IllegalArgumentException(animal.getPosition().toString());
         }
-        if (objectAt(animal.getPosition()) instanceof Grass ) {
+        if (objectAt(animal.getPosition()) instanceof Grass) {
             positionChangeGrass(animal.getPosition());
 //            mapElements.put(animal.getPosition(), animal);
 //            return true;

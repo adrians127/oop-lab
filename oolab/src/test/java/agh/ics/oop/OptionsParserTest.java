@@ -22,6 +22,9 @@ class OptionsParserTest {
         assertArrayEquals(moveDirectionList, optionsParser.parse(new String[]{
                 "l", "b", "r", "f", "left", "backward", "right", "forward"
         }));
+        assertThrows(IllegalArgumentException.class, ()->new OptionsParser().parse(new String[] {
+                "l", "b", "sheesh", "left"
+        }));
     }
 
 }
