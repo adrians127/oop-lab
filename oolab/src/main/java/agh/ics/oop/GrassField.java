@@ -18,7 +18,7 @@ public class GrassField extends AbstractWorldMap{
         for (int i = 0; i < n; i++) {
             Vector2d generatedPosition = randomGrassPlacer();
             mapElements.put(generatedPosition, new Grass(generatedPosition));
-
+            mapBoundary.addPosition(generatedPosition);
         }
     }
 

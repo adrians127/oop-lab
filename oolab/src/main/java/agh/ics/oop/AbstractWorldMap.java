@@ -8,6 +8,8 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
 
     protected int grassNumber;
 
+    public MapBoundary mapBoundary = new MapBoundary();
+
     MapVisualizer mapVisualizer = new MapVisualizer(this);
     protected final Vector2d bottomLeftBorder;
     protected final Vector2d topRightBorder;
@@ -31,25 +33,10 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
             }
         }
     }
-
-    private void setBorders() {
-        bottomLeftBorderDraw = topRightBorder;
-        topRightBorderDraw = bottomLeftBorder;
-        // change for animalList or grass depends what you want to see
-        for (IMapElement mapElement : mapElements.values()) {
-            bottomLeftBorderDraw = bottomLeftBorderDraw.lowerLeft(mapElement.getPosition());
-            topRightBorderDraw = topRightBorderDraw.upperRight(mapElement.getPosition());
-        }
-        bottomLeftBorderDraw.x -= 1;
-        bottomLeftBorderDraw.y -= 1;
-        topRightBorderDraw.x += 1;
-        topRightBorderDraw.y += 1;
-    }
-
     @Override
     public String toString() {
-        setBorders();
-        return mapVisualizer.draw(bottomLeftBorderDraw, topRightBorderDraw);
+        Vector2d[] borders = mapBoundary.getPositions();
+        return mapVisualizer.draw(borders[0], borders[1]);
     }
 
     @Override
@@ -63,6 +50,7 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
         Vector2d newPosition = randomGrassPlacer();
         Grass tempGrass = (Grass) objectAt(position);
         tempGrass.setPosition(newPosition);
+        mapBoundary.positionChanged(position, newPosition);
         mapElements.remove(position);
         mapElements.put(newPosition, tempGrass);
     }
@@ -86,6 +74,7 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
         }
         mapElements.put(animal.getPosition(), animal);
         animal.addObserver(this);
+        mapBoundary.addPosition(animal.getPosition());
 
         return true;
     }
@@ -101,12 +90,11 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     }
 
     @Override
-    public boolean positionChanged(Vector2d oldPosition, Vector2d newPosition) {
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
         // jezeli bedzie tam trawa modify
         Animal tempAnimal = (Animal) mapElements.get(oldPosition);
         mapElements.remove(oldPosition);
         mapElements.put(newPosition, tempAnimal);
-        return true;
-
+        mapBoundary.positionChanged(oldPosition, newPosition);
     }
 }
