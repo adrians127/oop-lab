@@ -19,9 +19,10 @@ public class Animal extends AbstractMapElement {
         //this.position = new Vector2d(2, 2);
         this.map = map;
     }
-    public Animal(IWorldMap map, Vector2d initialPosition){
+    public Animal(IWorldMap map, Vector2d initialPosition, MapDirection direction){
         this(map);
         this.position = initialPosition;
+        this.direction = direction;
     }
 
     @Override
@@ -71,6 +72,16 @@ public class Animal extends AbstractMapElement {
         for (IPositionChangeObserver at : observers) {
             at.positionChanged(oldPosition, newPosition);
         }
+    }
+
+    @Override
+    public String getImageSrc() {
+        return switch (getDirection()) {
+            case NORTH -> "src/main/resources/up.png";
+            case EAST -> "src/main/resources/right.png";
+            case SOUTH -> "src/main/resources/down.png";
+            case WEST -> "src/main/resources/left.png";
+        };
     }
 
 }

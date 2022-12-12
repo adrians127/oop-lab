@@ -63,7 +63,7 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     }
 
     @Override
-    public boolean place(Animal animal) {
+    public boolean place(Animal animal) throws IllegalArgumentException{
         if (objectAt(animal.getPosition()) instanceof Animal) {
             throw new IllegalArgumentException(animal.getPosition().toString());
         }
@@ -96,5 +96,10 @@ public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
         mapElements.remove(oldPosition);
         mapElements.put(newPosition, tempAnimal);
         mapBoundary.positionChanged(oldPosition, newPosition);
+    }
+
+    @Override
+    public HashMap<Vector2d, IMapElement> getMapElements() {
+        return mapElements;
     }
 }
